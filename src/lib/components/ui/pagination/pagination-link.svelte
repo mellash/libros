@@ -20,13 +20,7 @@
 
 <PaginationPrimitive.Page
 	bind:page
-	class={cn(
-		buttonVariants({
-			variant: isActive ? "outline" : "ghost",
-			size,
-		}),
-		className
-	)}
+	class="pl-2 pr-2"
 	{...$$restProps}
 	on:click
 >

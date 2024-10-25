@@ -9,7 +9,7 @@
 </script>
 
 <SelectPrimitive.Label
-	class={cn("py-1.5 pl-8 pr-2 text-sm font-semibold", className)}
+	class={cn("border-2 border-black  py-1.5 pl-8 pr-2 text-sm font-semibold", className)}
 	{...$$restProps}
 >
 	<slot />

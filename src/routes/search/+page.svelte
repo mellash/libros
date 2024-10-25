@@ -1,10 +1,6 @@
 <script lang="ts">
 	// svelte core
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-
-	// third party
-	import { ChevronLeft } from 'lucide-svelte';
 
 	// shadcdn components
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -24,7 +20,6 @@
 	import downloadStore from '$store/downloadStore';
 	import globalStore, { toggleLoading } from '../../store/globalStore';
 	import BookSkeleton from '$lib/components/BookSkeleton.svelte';
-	import ThemeSwitch from '$lib/components/ThemeSwitch.svelte';
 	import { toast } from 'svelte-sonner';
 	import Paginator from '$lib/components/Paginator.svelte';
 
@@ -59,33 +54,59 @@
 	});
 </script>
 
-<div class=" h-full w-full p-5 lg:px-[5rem]">
-	<div class=" flex items-center justify-between">
+<!-- Container -->
+<div class="">
+  <!-- Navigations start -->
+	<div class="flex items-center justify-between ml-[10%] mr-[10%]">
+
+    <!-- Home button -->
 		<div class="flex items-center">
-			<a href="/"
-				><Button variant="outline" size="icon">
-					<ChevronLeft class="h-4 w-4" />
-				</Button></a
-			>
-			<ThemeSwitch className="mx-3" />
+			<a href="/">
+        <button>Home</button>
+      </a>
 		</div>
 
-		<p class=" my-3 flex items-center text-lg">
-			<span class=" mx-4">Search results for</span>
-			<Badge>{query}</Badge>
-		</p>
+    <!-- Search bar -->
+    <div class="flex grow">
+      <SearchBar onSubmit={() => (searchResults = [])} />
+    </div>
+
+    <!-- Download button -->
+    <Dialog.Root>
+    <Dialog.Trigger on:click={() => {}}>
+      <button class="flex items-center">
+        {$downloadStore.downloads.length} Downloads 
+        <svg style="margin-left: 4px;" width="12" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 1.25V9.25M4 9.25L1 7.75M4 9.25L7 7.75M1 10.75H7" stroke="black" stroke-opacity="0.7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </Dialog.Trigger>
+      <Dialog.Content>
+        <DownloadProgress />
+      </Dialog.Content>
+    </Dialog.Root>
 	</div>
-	<SearchBar onSubmit={() => (searchResults = [])} />
+  <!-- Navigation end -->
+
+  <!-- Searched term -->
+  <div class="w-full">
+    <h2 class="text-[32px] border-black border-t-[1px] border-b-[1px] pl-[6%] pt-[12px] pb-[12px] mt-[30px] mb-[60px] w-full">{query.charAt(0).toUpperCase() + query.slice(1)}</h2>
+  </div>
+
+  <!-- No books -->
 	{#if searchResults.length == 0 && !$globalStore.loading}
 		<div class=" h-full w-full">
 			<p class=" m-4 text-center text-3xl">Looks like we got no books for this search</p>
 		</div>
 	{/if}
-	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 ml-[6%] mr-[6%]">
+    <!-- Books -->
 		{#each searchResults as book, i (i)}
 			<BookUI {book} />
 		{/each}
 
+    <!-- Loading books -->
 		{#if $globalStore.loading && searchResults.length < 1}
 			<BookSkeleton />
 			<BookSkeleton />
@@ -95,25 +116,19 @@
 			<BookSkeleton />
 		{/if}
 	</div>
-	<div class=" ">
-		{#if totalPages && searchResults}
-			<Paginator
-				{totalPages}
-				{currentPage}
-				perPage={25}
-				{query}
-				{filterBy}
-				onPreceed={() => (searchResults = [])}
-			/>
-		{/if}
-	</div>
-</div>
 
-<Dialog.Root>
-	<Dialog.Trigger class="w-full" on:click={() => {}}>
-		<Button class="fixed bottom-5 right-5">Downloads ( {$downloadStore.downloads.length} )</Button>
-	</Dialog.Trigger>
-	<Dialog.Content>
-		<DownloadProgress />
-	</Dialog.Content>
-</Dialog.Root>
+  <!-- Paginations -->
+  {#if totalPages && searchResults}
+    <div class="border-black border-t-[1px] mt-[80px] mb-[40px]">
+      <Paginator
+        {totalPages}
+        {currentPage}
+        perPage={25}
+        {query}
+        {filterBy}
+        onPreceed={() => (searchResults = [])} />
+    </div>
+  {/if}
+
+</div>
+<!-- Container end -->

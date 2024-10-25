@@ -18,7 +18,7 @@
 	};
 </script>
 
-<Pagination.Root class="my-5    " count={totalPages * 25} perPage={25} let:pages let:currentPage>
+<Pagination.Root class="my-5 pt-[30px]" count={totalPages * 25} perPage={25} let:pages let:currentPage>
 	<Pagination.Content class="flex flex-col items-center   sm:flex-row">
 		<Pagination.Item>
 			{#if currentPage}

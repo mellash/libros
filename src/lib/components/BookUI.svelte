@@ -47,52 +47,43 @@
 	};
 </script>
 
-<div
-	class="  relative flex flex-col rounded-xl bg-background bg-clip-border text-gray-700 shadow-lg outline outline-1"
->
-	<div class="relative mx-4 mt-4 text-gray-700">
+<!-- Container -->
+<div class="flex flex-col items-center border-r border-b border-t-0 [&:nth-child(4n)]:border-r-0 border-black">
+  <!-- Book cover -->
+	<div class="mt-4">
 		<img
-			class=" h-[300px] w-full rounded-xl object-cover"
+			class="h-[250px] w-[200px] object-cover"
 			src={`${API_SERVER_URL}/proxy?url=${book.thumbUrl}`}
-			alt=""
-		/>
+			alt="Book cover" 
+      />
 	</div>
-	<div class="  p-6 md:h-52">
+
+  <!-- Book info -->
+	<div class="flex flex-col items-start m-0 p-4 pb-0 md:h-52">
+  <!-- Book title -->
 		<div class="mb-2 flex items-center justify-between">
-			<p class=" block font-sans text-base font-bold leading-relaxed text-primary antialiased">
-				{book.title.replace(/\d{5,}/g, '').slice(0, 100)}
-				{book.title.replace(/\d{5,}/g, '').length > 100 ? '....' : ''}
-			</p>
+      <a href="#download-link">
+        <p class="text-base font-bold leading-relaxed text-primary antialiased underline" style="text-decoration: underline">
+          { book.title.replace(/\d{5,}/g, '').slice(0, 24)}
+          { book.title.replace(/\d{5,}/g, '').length > 24 ?  '....' : ''}
+        </p>
+      </a>
 		</div>
 
+    <!-- Book author -->
 		<div>
-			<p class="  text-slate-500">
-				<span class=" font-bold">Authors :</span>
-
+			<p class="text-slate-500 text-left">
 				{#if book.authors.length}
-					<small
-						>{book.authors.length > 100
+						{book.authors.length > 100
 							? `${book.authors.slice(0, 100)} ....`
-							: book.authors}</small
-					>
+							: book.authors}
 				{:else}
-					<small>{book.authors.length && NOT_AVAILABLE}</small>
+					{book.authors.length && NOT_AVAILABLE}
 				{/if}
 			</p>
-			<p class="flex items-center">
-				<CalendarDays size={20} /> <span class=" mx-1">{book.year || NOT_AVAILABLE}</span>
-			</p>
 		</div>
+
 	</div>
-	<div class="p-6 pt-0">
-		<Dialog.Root>
-			<Dialog.Trigger class="w-full" on:click={() => handleDownload(book)}
-				><Button class=" w-full ">Download {book.extension.toUpperCase()} ( {book.size} )</Button
-				></Dialog.Trigger
-			>
-			<Dialog.Content>
-				<DownloadProgress />
-			</Dialog.Content>
-		</Dialog.Root>
-	</div>
+  <!-- Book info end -->
 </div>
+<!-- Container end -->
